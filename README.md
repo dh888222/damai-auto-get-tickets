@@ -65,4 +65,4 @@ pip install selenium
 ## Ref
 本代码基于以下的Repo进行改进：
 
-Entromorgan:https://github.com/Entromorgan/Autoticket
+Entromorgan:https://github.com/BBDrive/damai_ticket
