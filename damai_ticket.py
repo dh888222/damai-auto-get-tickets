@@ -105,6 +105,12 @@ class Concert(object):
 
     def choose_ticket(self):
         print(u"###进入抢票界面###")
+        print(u'###准备清楚提示窗口###')
+        try:
+            self.driver.execute_script("document.getElementsByClassName('realname-popup')[0].style.display = 'none'")
+            print(u'###成功清理提示窗口###')
+        except:
+            print(u'###无提示窗口###')
         while self.driver.title.find('确认订单') == -1:  # 如果跳转到了确认界面就算这步成功了，否则继续执行此步
             self.num += 1
 
@@ -195,10 +201,13 @@ class Concert(object):
         if self.status in [3, 4, 5]:
             if self.real_name is not None:
                 print(u"###等待--确认订单--页面出现，可自行刷新，若长期不跳转可选择-- CRTL+C --重新抢票###")
+                #print(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]')))
+                #print(EC.find_element_by_class_name('ticket-buyer-select'))
                 try:
-                    tb = WebDriverWait(self.driver, 3600, 0.1).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]')))
+                    tb = WebDriverWait(self.driver, 3600, 0.1).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.ticket-buyer-select')))
                 except:
                     raise Exception(u"***Error：实名信息选择框没有显示***")
+
                 print(u'###开始确认订单###')
                 print(u'###选择购票人信息,可手动帮助点击###')
                 init_sleeptime = 0.0
@@ -218,14 +227,13 @@ class Concert(object):
                     if true_num == len(self.real_name):
                         break
                 print("本次抢票时间：", time()-self.time_start)
-                self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[9]/button').click() # 同意以上协议并提交订单
-
+                self.driver.find_element_by_class_name('submit-wrapper').find_element_by_tag_name('button').click() # 同意以上协议并提交订单
             else:
-                self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[8]/button').click()
-
+                self.driver.find_element_by_class_name('submit-wrapper').find_element_by_tag_name('button').click()
             # 判断title是不是支付宝
             print(u"###等待跳转到--付款界面--，可自行刷新，若长期不跳转可选择-- CRTL+C --重新抢票###")
             try:
+                print(self.driver)
                 WebDriverWait(self.driver, 3600, 0.1).until(EC.title_contains('支付宝'))
             except:
                 raise Exception(u'***Error: 长期跳转不到付款界面***')
