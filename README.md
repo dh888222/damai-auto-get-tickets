@@ -1,5 +1,6 @@
-# damai_ticket
-大麦网自动抢票工具
+# damai_auto_get_ticket
+由damai_ticket改的大麦网自动抢票工具
+原来的脚本已经不能抢票了，选择器上好像有点问题，我重写了一下。
 
 ## Preliminary
 Python 3.6+
